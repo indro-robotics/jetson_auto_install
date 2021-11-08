@@ -23,7 +23,7 @@ source ~/.bashrc
 sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
 sudo apt install python-rosdep -y
 
-sudo rosdep init
+rosdep init
 rosdep update
 
 # Make your catkin workspace
