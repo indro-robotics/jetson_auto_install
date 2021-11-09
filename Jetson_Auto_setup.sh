@@ -18,10 +18,14 @@ sudo apt update
 sudo apt install ros-melodic-desktop-full -y
 
 echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+echo "source //setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
 sudo apt install python-rosdep -y
+sudo apt install python-pip python3-pip -y
+
+sudo apt autoremove
 
 rosdep init
 rosdep update
@@ -35,14 +39,15 @@ catkin_make
 
 # Git Pull the proper repos
 echo "Pulling Git Repos for SwiftNav and Rosserial"
-cd src
+cd ~/catkin_ws/src
 git clone https://github.com/ros-drivers/rosserial.git --branch melodic-devel
-git clone git@github.com:austin-inDro/swift_pgm.git
+git clone https://github.com/austin-inDro/swift_pgm.git
 
 echo "Installing necessary SwiftNav packages"
-cd swift_pgm
+cd ~/catkin_ws/src/swift_pgm
 python3 -m pip install -r requirements.txt
-cd ..
+python3 -m pip install catkin_pkg # May be needed for Ros_Upstart
+cd ~/catkin_ws/src/
 
 # Installing Agile X Packages
 echo "Installing Agile X Packages"
@@ -55,9 +60,9 @@ git clone https://github.com/agilexrobotics/ugv_sdk.git
 git clone https://github.com/agilexrobotics/scout_ros.git
 git clone https://github.com/agilexrobotics/hunter_ros.git
 git clone https://github.com/agilexrobotics/tracer_ros.git
-git clone https://github.com/clearpathrobotics/robot_upstart.git
+git clone https://github.com/clearpathrobotics/robot_upstart.git --branch melodic-devel
 
-cd ..
+cd ~/catkin_ws
 catkin_make
 
 #Installing Teensy Drivers
@@ -66,22 +71,13 @@ cd ~/Downloads
 wget https://www.pjrc.com/teensy/00-teensy.rules
 sudo cp 00-teensy.rules /etc/udev/rules.d/
 
+rm 00-teensy.rules
+
 wget https://www.pjrc.com/teensy/td_155/TeensyduinoInstall.linuxarm
 sudo chmod 755 TeensyduinoInstall.linuxarm
-./TeensyduinoInstall.linux64
+./TeensyduinoInstall.linuxarm
 
-# Connecting Rocos
-echo "Connecting Rocos.."
-echo "You will need to interact with the terminal"
-echo "deb https://packages.rocos.io/apt stable main" | sudo tee -a /etc/apt/sources.list.d/rocos.list
-curl https://packages.rocos.io/apt/docs/key.gpg | sudo apt-key add -
-sudo apt-get update && sudo apt-get install rocos-agent -y
-sudo rocos-agent
-
-echo "Attempting to start the rocos-agent for the first time"
-sudo systemctl start rocos-agent
-echo "Rocos should be working... Moving on"
-
+echo "Attempting to enable the Can0 port. Ensure it's connected to the Jetson"
 # Enable CAN-To-USB 
 sudo modprobe gs_usb
 
@@ -97,5 +93,15 @@ catkin_create_pkg RIAB_startup std_msgs rospy
 # vi ROS_boot.launch
 echo "You still need to create the"
 echo "rosrun robot_upstart install myrobot_bringup/launch/base.launch"
-echo "Command stuff... Not sure what robot you're using..."
-echo "Other than that, done..."
+
+# Connecting Rocos
+echo "Setting Up Rocos.."
+echo "You will need to interact with the terminal"
+echo "deb https://packages.rocos.io/apt stable main" | sudo tee -a /etc/apt/sources.list.d/rocos.list
+curl https://packages.rocos.io/apt/docs/key.gpg | sudo apt-key add -
+sudo apt-get update && sudo apt-get install rocos-agent -y
+sudo rocos-agent
+
+echo "Attempting to start the rocos-agent for the first time"
+sudo systemctl start rocos-agent
+echo "Rocos should be working... Moving on"
