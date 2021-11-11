@@ -103,6 +103,10 @@ echo "You will need to populate the boot.launch file with what you want to happe
 rosrun robot_upstart install riab_startup/launch/boot.launch --job ros_boot --symlink
 sudo systemctl daemon-reload
 
+# Adding CAN bus support into kernel for boot
+sudo bash -c 'echo -e "can\ncan_raw" > /etc/modules-load.d/can.conf'
+sudo bash -c 'echo -e "[Match]\nName=can0\n\n[CAN]\nBitRate=500k\nRestartSec=100ms" > /etc/systemd/network/80-can.network'
+
 # Connecting Rocos
 echo "Setting Up Rocos.."
 echo "You will need to interact with the terminal"
