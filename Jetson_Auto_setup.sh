@@ -107,5 +107,5 @@ sudo apt-get update && sudo apt-get install rocos-agent -y
 sudo rocos-agent
 
 echo "Attempting to start the rocos-agent for the first time"
-sudo systemctl start rocos-agent
+# sudo systemctl start rocos-agent
 echo "Rocos should be working... Moving on"
