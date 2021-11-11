@@ -19,7 +19,6 @@ sudo apt update
 sudo apt install ros-melodic-desktop-full -y
 
 echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
-echo "source //setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
@@ -38,6 +37,9 @@ mkdir -p catkin_ws/src
 cd catkin_ws
 catkin_make
 
+echo "source $HOME/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
 # Git Pull the proper repos
 echo "Pulling Git Repos for SwiftNav and Rosserial"
 cd ~/catkin_ws/src
@@ -52,10 +54,10 @@ cd ~/catkin_ws/src/
 
 # Installing Agile X Packages
 echo "Installing Agile X Packages"
-sudo apt install -y libasio-dev
-sudo apt install -y ros-$ROS_DISTRO-teleop-twist-keyboard
-sudo apt install -y ros-$ROS_DISTRO-joint-state-publisher-gui
-sudo apt install -y ros-$ROS_DISTRO-ros-controllers
+sudo apt install libasio-dev -y 
+sudo apt install ros-$ROS_DISTRO-teleop-twist-keyboard -y 
+sudo apt install ros-$ROS_DISTRO-joint-state-publisher-gui -y 
+sudo apt install ros-$ROS_DISTRO-ros-controllers -y 
 
 git clone https://github.com/agilexrobotics/ugv_sdk.git  
 git clone https://github.com/agilexrobotics/scout_ros.git
@@ -74,9 +76,9 @@ sudo cp 00-teensy.rules /etc/udev/rules.d/
 
 rm 00-teensy.rules
 
-wget https://www.pjrc.com/teensy/td_155/TeensyduinoInstall.linuxarm
-sudo chmod 755 TeensyduinoInstall.linuxarm
-./TeensyduinoInstall.linuxarm
+# wget https://www.pjrc.com/teensy/td_155/TeensyduinoInstall.linuxarm
+# sudo chmod 755 TeensyduinoInstall.linuxarm
+# ./TeensyduinoInstall.linuxarm
 
 echo "Attempting to enable the Can0 port. Ensure it's connected to the Jetson"
 # Enable CAN-To-USB 
