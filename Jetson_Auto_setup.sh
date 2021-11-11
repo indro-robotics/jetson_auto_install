@@ -95,9 +95,13 @@ echo "Setting up system for automatic ROS boot"
 cd ~/catkin_ws/src
 
 catkin_create_pkg riab_startup std_msgs rospy
-# vi ROS_boot.launch
-echo "You still need to create the"
-echo "rosrun robot_upstart install myrobot_bringup/launch/base.launch"
+cd ~/catkin_ws/src/riab_startup
+mkdir launch
+cd launch
+touch boot.launch
+echo "You will need to populate the boot.launch file with what you want to happen at boot..."
+rosrun robot_upstart install riab_startup/launch/boot.launch --job ros_boot --symlink
+sudo systemctl daemon-reload
 
 # Connecting Rocos
 echo "Setting Up Rocos.."
