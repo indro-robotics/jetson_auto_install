@@ -94,7 +94,7 @@ rosrun tracer_bringup bringup_can2usb.bash
 echo "Setting up system for automatic ROS boot"
 cd ~/catkin_ws/src
 
-catkin_create_pkg RIAB_startup std_msgs rospy
+catkin_create_pkg riab_startup std_msgs rospy
 # vi ROS_boot.launch
 echo "You still need to create the"
 echo "rosrun robot_upstart install myrobot_bringup/launch/base.launch"
