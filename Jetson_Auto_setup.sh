@@ -63,6 +63,7 @@ git clone https://github.com/agilexrobotics/ugv_sdk.git
 git clone https://github.com/agilexrobotics/scout_ros.git
 git clone https://github.com/agilexrobotics/hunter_ros.git
 git clone https://github.com/agilexrobotics/tracer_ros.git
+git clone https://github.com/agilexrobotics/bunker_ros.git
 git clone https://github.com/clearpathrobotics/robot_upstart.git --branch melodic-devel
 
 cd ~/catkin_ws
