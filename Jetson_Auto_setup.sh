@@ -27,7 +27,7 @@ sudo apt install python-pip python3-pip -y
 
 sudo apt autoremove
 
-rosdep init
+sudo rosdep init
 rosdep update
 
 # Make your catkin workspace
@@ -80,6 +80,7 @@ rm 00-teensy.rules
 # sudo chmod 755 TeensyduinoInstall.linuxarm
 # ./TeensyduinoInstall.linuxarm
 
+source ~/.bashrc
 echo "Attempting to enable the Can0 port. Ensure it's connected to the Jetson"
 # Enable CAN-To-USB 
 sudo modprobe gs_usb
