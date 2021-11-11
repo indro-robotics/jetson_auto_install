@@ -24,6 +24,7 @@ source ~/.bashrc
 sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
 sudo apt install python-rosdep -y
 sudo apt install python-pip python3-pip -y
+sudo apt-get install -y setpriv
 
 sudo apt autoremove
 
@@ -106,11 +107,12 @@ sudo systemctl daemon-reload
 # Adding CAN bus support into kernel for boot
 sudo bash -c 'echo -e "can\ncan_raw" > /etc/modules-load.d/can.conf'
 sudo bash -c 'echo -e "[Match]\nName=can0\n\n[CAN]\nBitRate=500k\nRestartSec=100ms" > /etc/systemd/network/80-can.network'
-sudo bash -c 'echo -e "[Unit]\nDescription=CAN @ 500000 Auther: Ahmad Tamimi\nAfter=multi-user.target\nBefore=ros_boot.service\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\nUser=root\nExecStart=/sbin/ip link set can0 type can bitrate 500000 ; /sbin/ip link set can0 up\nExecReload=/sbin/ip link set can0 down ; /sbin/ip link set can0 type can bitrate 500000 ; /sbin/ip link set can0 up\nExecStop=/sbin/ip link set can0 down\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/can_interface.service'
+sudo bash -c 'echo -e "[Unit]\nDescription=CAN @ 500000 Auther: Ahmad Tamimi\nBefore=multi-user.target\nAfter=ros_boot.service\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\nUser=root\nExecStart=/sbin/ip link set can0 type can bitrate 500000 ; /sbin/ip link set can0 up\nExecReload=/sbin/ip link set can0 down ; /sbin/ip link set can0 type can bitrate 500000 ; /sbin/ip link set can0 up\nExecStop=/sbin/ip link set can0 down\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/can_interface.service'
 
+sudo systemctl daemon-reload
 sudo systemctl restart systemd-networkd
-sudo systemctl start can_interface
-sudo systemctl start ros_boot
+sudo systemctl enable can_interface.service
+sudo systemctl start ros_boot.service
 
 # Connecting Rocos
 echo "Setting Up Rocos.."
@@ -120,6 +122,3 @@ curl https://packages.rocos.io/apt/docs/key.gpg | sudo apt-key add -
 sudo apt-get update && sudo apt-get install rocos-agent -y
 sudo rocos-agent
 
-echo "Attempting to start the rocos-agent for the first time"
-# sudo systemctl start rocos-agent
-echo "Rocos should be working... Moving on"
