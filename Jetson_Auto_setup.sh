@@ -5,11 +5,12 @@
 
 # Used for install ROS Melodic, Swift Nav, Teensy, and Agile X Software
 echo "Starting Install..."
-sudo apt update 
-sudo apt dist-upgrade -y
-sudo apt install -y curl
-sudo apt install git -y
 
+read -e -p "What is the sudo password?: " PASS
+echo $PASS | sudo -S apt update 
+sudo apt dist-upgrade -y
+sudo apt install curl -y
+sudo apt install git -y
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
