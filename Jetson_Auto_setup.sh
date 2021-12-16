@@ -26,7 +26,7 @@ sudo apt install python-rosdep -y
 sudo apt install python-pip python3-pip -y
 sudo apt-get install -y setpriv
 
-sudo apt autoremove
+sudo apt autoremove -y
 
 sudo rosdep init
 rosdep update
