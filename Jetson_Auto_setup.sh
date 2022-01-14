@@ -31,6 +31,8 @@ sudo apt autoremove -y
 sudo rosdep init
 rosdep update
 
+source ~/.bashrc
+
 # Make your catkin workspace
 echo "Creating Catkin Workspace"
 cd ~
@@ -66,6 +68,13 @@ git clone https://github.com/agilexrobotics/hunter_ros.git
 git clone https://github.com/agilexrobotics/tracer_ros.git
 git clone https://github.com/agilexrobotics/bunker_ros.git
 git clone https://github.com/clearpathrobotics/robot_upstart.git --branch melodic-devel
+
+# Installing Thermal Camera
+git clone https://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@github.com/indro-robotics/WALL-E-Thermal-Camera.git
+cd ~/catkin_ws/src/WALL-E-Thermal-Camera
+
+sudo apt-get install libxml2-dev libxslt-dev python-dev -y
+python3 -m pip install -r requirements.txt
 
 cd ~/catkin_ws
 catkin_make
