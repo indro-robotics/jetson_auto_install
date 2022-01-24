@@ -123,6 +123,33 @@ sudo systemctl restart systemd-networkd
 sudo systemctl enable can_interface.service
 sudo systemctl start ros_boot.service
 
+# Adding a time fix into network up...
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd $SCRIPT_DIR
+sudo chmod +x startup.sh
+sudo mv startup.sh /etc/network/if-up.d/
+sudo bash -c 'echo -e "[Unit]
+# Type=simple|forking|oneshot|dbus|notify|idle
+Description=Time Fix daemon
+## make sure we only start the service after network is up
+Wants=network-online.target
+After=network.target
+
+[Service]
+## here we can set custom environment variables
+Environment=AUTOSSH_GATETIME=0
+Environment=AUTOSSH_PORT=0
+ExecStart=/etc/network/if-up.d/startup.sh
+# Useful during debugging; remove it once the service is working
+StandardOutput=console
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/timefix.service'
+
+sudo systemctl daemon-reload
+sudo systemctl start timefix
+sudo systemctl enable timefix
+
 # Connecting Rocos
 echo "Setting Up Rocos.."
 echo "You will need to interact with the terminal"
