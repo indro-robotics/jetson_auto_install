@@ -114,13 +114,20 @@ rosrun robot_upstart install riab_startup/launch/boot.launch --job ros_boot --sy
 sudo systemctl daemon-reload
 
 # Adding CAN bus support into kernel for boot
-sudo bash -c 'echo -e "can\ncan_raw" > /etc/modules-load.d/can.conf'
-sudo bash -c 'echo -e "[Match]\nName=can0\n\n[CAN]\nBitRate=500k\nRestartSec=100ms" > /etc/systemd/network/80-can.network'
-sudo bash -c 'echo -e "[Unit]\nDescription=CAN @ 500000 Auther: Ahmad Tamimi\nBefore=multi-user.target\nAfter=ros_boot.service\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\nUser=root\nExecStart=/sbin/ip link set can0 type can bitrate 500000 ; /sbin/ip link set can0 up\nExecReload=/sbin/ip link set can0 down ; /sbin/ip link set can0 type can bitrate 500000 ; /sbin/ip link set can0 up\nExecStop=/sbin/ip link set can0 down\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/can_interface.service'
+sudo bash -c '
 
+auto can0
+  iface can0 inet manual
+  pre-up /sbin/ip link set can0 type can bitrate 500000
+  up /sbin/ifconfig can0 up
+  down /sbin/ifconfig can0 downauto can0
+  iface can0 inet manual
+  pre-up /sbin/ip link set can0 type can bitrate 500000
+  up /sbin/ifconfig can0 up
+  down /sbin/ifconfig can0 down" >> /etc/network/interfaces'
+  
 sudo systemctl daemon-reload
 sudo systemctl restart systemd-networkd
-sudo systemctl enable can_interface.service
 sudo systemctl start ros_boot.service
 
 # Adding a time fix into network up...
@@ -149,6 +156,8 @@ WantedBy=multi-user.target" > /etc/systemd/system/timefix.service'
 sudo systemctl daemon-reload
 sudo systemctl start timefix
 sudo systemctl enable timefix
+
+cd ~
 
 # Connecting Rocos
 echo "Setting Up Rocos.."
