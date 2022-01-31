@@ -157,7 +157,26 @@ sudo systemctl daemon-reload
 sudo systemctl start timefix
 sudo systemctl enable timefix
 
-cd ~
+cd ~/catkin_ws/src
+
+# Downloading Packages for Autonomous...
+git clone https://github.com/ros-drivers/phidgets_drivers # Can't use Melodic branch since it doesn't work with our IMU (MOT0109_0)
+git clone -b $ROS_DISTRO-devel https://github.com/cra-ros-pkg/robot_localization
+git clone -b $ROS_DISTRO-devel https://github.com/ros-drivers/velodyne.git
+echo "You'll need to still set up the Velodyne Manually http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16"
+sudo apt-get install ros-$ROS_DISTRO-velodyne
+
+# IMU Tools
+sudo apt-get install ros-$ROS_DISTRO-imu-tools
+git clone -b $ROS_DISTRO https://github.com/ccny-ros-pkg/imu_tools.git
+git clone -b $ROS_DISTRO-devel https://github.com/ros-planning/navigation.git
+
+cd ~/catkin_ws
+rosdep install --from-paths src --ignore-src -r -y
+
+catkin_make
+
+# You'll still need to change and connect packages for autonomous to work properly... TODO for later
 
 # Connecting Rocos
 echo "Setting Up Rocos.."
