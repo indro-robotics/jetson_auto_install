@@ -178,6 +178,10 @@ catkin_make
 
 # You'll still need to change and connect packages for autonomous to work properly... TODO for later
 
+
+# Setting Up WireGuard VPN
+sudo apt-get install wireguard openresolv -y
+
 # Connecting Rocos
 echo "Setting Up Rocos.."
 echo "You will need to interact with the terminal"
