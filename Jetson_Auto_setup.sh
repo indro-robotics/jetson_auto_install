@@ -159,6 +159,9 @@ sudo systemctl enable timefix
 
 cd ~
 
+# Setting Up WireGuard VPN
+sudo apt-get install wireguard openresolv -y
+
 # Connecting Rocos
 echo "Setting Up Rocos.."
 echo "You will need to interact with the terminal"
