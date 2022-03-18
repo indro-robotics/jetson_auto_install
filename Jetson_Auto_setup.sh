@@ -38,6 +38,7 @@ echo "Creating Catkin Workspace"
 cd ~
 mkdir -p catkin_ws/src
 cd catkin_ws
+source ~/.bashrc
 catkin_make
 
 echo "source $HOME/catkin_ws/devel/setup.bash" >> ~/.bashrc
@@ -70,11 +71,11 @@ git clone https://github.com/agilexrobotics/bunker_ros.git
 git clone https://github.com/clearpathrobotics/robot_upstart.git --branch melodic-devel
 
 # Installing Thermal Camera
-git clone https://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@github.com/indro-robotics/WALL-E-Thermal-Camera.git
-cd ~/catkin_ws/src/WALL-E-Thermal-Camera
+#git clone https://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@github.com/indro-robotics/WALL-E-Thermal-Camera.git
+#cd ~/catkin_ws/src/WALL-E-Thermal-Camera
 
-sudo apt-get install libxml2-dev libxslt-dev python-dev -y
-python3 -m pip install -r requirements.txt
+#sudo apt-get install libxml2-dev libxslt-dev python-dev -y
+#python3 -m pip install -r requirements.txt
 
 cd ~/catkin_ws
 catkin_make
@@ -117,10 +118,6 @@ sudo systemctl daemon-reload
 sudo bash -c '
 
 auto can0
-  iface can0 inet manual
-  pre-up /sbin/ip link set can0 type can bitrate 500000
-  up /sbin/ifconfig can0 up
-  down /sbin/ifconfig can0 downauto can0
   iface can0 inet manual
   pre-up /sbin/ip link set can0 type can bitrate 500000
   up /sbin/ifconfig can0 up
