@@ -157,7 +157,7 @@ sudo systemctl enable timefix
 cd ~
 
 # Setting Up WireGuard VPN
-sudo apt-get install wireguard openresolv -y
+#sudo apt-get install wireguard openresolv -y
 # After adding /etc/wireguard/wg0.conf
 # sudo systemctl enable wg-quick@wg0.service
 # sudo systemctl daemon-reload
