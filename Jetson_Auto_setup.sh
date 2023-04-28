@@ -3,7 +3,7 @@
 # InDro Robotics
 # Austin Greisman - austin.greisman@indrorobotics.com
 
-# Used for install ROS Melodic, Swift Nav, Teensy, and Agile X Software
+# Used for install ROS Noetic, Swift Nav, Teensy, and Agile X Software
 echo "Starting Install..."
 
 read -e -p "What is the sudo password?: " PASS
@@ -16,9 +16,9 @@ curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo ap
 
 sudo apt update
 
-sudo apt install ros-melodic-desktop-full -y
+sudo apt install ros-noetic-desktop-full -y
 
-echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
@@ -47,7 +47,7 @@ source ~/.bashrc
 # Git Pull the proper repos
 echo "Pulling Git Repos for SwiftNav and Rosserial"
 cd ~/catkin_ws/src
-git clone https://github.com/ros-drivers/rosserial.git --branch melodic-devel
+git clone https://github.com/ros-drivers/rosserial.git --branch noetic-devel
 git clone https://github.com/austin-inDro/swift_pgm.git
 
 echo "Installing necessary SwiftNav packages"
@@ -68,7 +68,7 @@ git clone https://github.com/agilexrobotics/scout_ros.git
 git clone https://github.com/agilexrobotics/hunter_ros.git
 git clone https://github.com/agilexrobotics/tracer_ros.git
 git clone https://github.com/agilexrobotics/bunker_ros.git
-git clone https://github.com/clearpathrobotics/robot_upstart.git --branch melodic-devel
+git clone https://github.com/clearpathrobotics/robot_upstart.git --branch noetic-devel
 
 # Installing Thermal Camera
 #git clone https://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@github.com/indro-robotics/WALL-E-Thermal-Camera.git
@@ -94,12 +94,24 @@ rm 00-teensy.rules
 
 source ~/.bashrc
 echo "Attempting to enable the Can0 port. Ensure it's connected to the Jetson"
-# Enable CAN-To-USB 
+
+# Enable kernel module: gs_usb
 sudo modprobe gs_usb
 
-echo "Running bring up commands..."
-rosrun tracer_bringup setup_can2usb.bash
-rosrun tracer_bringup bringup_can2usb.bash
+# Bring up can interface
+sudo ip link set can0 up type can bitrate 500000
+
+# Install can utils
+sudo apt install -y can-utils
+
+
+#CAN BUS INSTALLATION
+#bring up can interface
+sudo ip link set can0 up type can bitrate 500000
+
+#echo "Running bring up commands..."
+#rosrun tracer_bringup setup_can2usb.bash
+#rosrun tracer_bringup bringup_can2usb.bash
 
 # Setup Reboot commands
 echo "Setting up system for automatic ROS boot"
