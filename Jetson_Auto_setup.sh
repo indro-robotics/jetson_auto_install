@@ -5,6 +5,9 @@
 # Arif Anjum  - arif.anjum@indrorobotics.com
 
 # Used for install ROS Noetic, Swift Nav, Teensy, and Agile X Software
+
+gsettings set org.gnome.desktop.background picture-uri "file:///home/$USER/jetson_auto_install/InDroRobotics.png"
+
 echo "Starting Install..."
 
 read -e -p "What is the sudo password?: " PASS
