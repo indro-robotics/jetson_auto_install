@@ -64,9 +64,9 @@ cd ~/catkin_ws/src/
 # Installing Agile X Packages
 echo "Installing Agile X Packages"
 sudo apt install libasio-dev -y 
-sudo apt install ros-$ROS_DISTRO-teleop-twist-keyboard -y 
-sudo apt install ros-$ROS_DISTRO-joint-state-publisher-gui -y 
-sudo apt install ros-$ROS_DISTRO-ros-controllers -y 
+sudo apt install ros-noetic-teleop-twist-keyboard -y 
+sudo apt install ros-noetic-joint-state-publisher-gui -y 
+sudo apt install ros-noetic-ros-controllers -y 
 
 git clone https://github.com/agilexrobotics/ugv_sdk.git  
 git clone https://github.com/agilexrobotics/scout_ros.git
