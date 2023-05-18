@@ -22,10 +22,9 @@ sudo apt install ros-noetic-desktop-full -y
 echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
-sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
-sudo apt install python-rosdep -y
-sudo apt install python-pip python3-pip -y
-sudo apt-get install -y setpriv
+sudo apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential -y
+sudo apt install python3-rosdep -y
+sudo apt install python3-pip -y
 
 sudo apt autoremove -y
 
