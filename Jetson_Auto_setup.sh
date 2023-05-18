@@ -6,15 +6,18 @@
 
 # Used for install ROS Noetic, Swift Nav, Teensy, and Agile X Software
 
+# INDROROBOTICS Background Installation
 gsettings set org.gnome.desktop.background picture-uri "file:///home/$USER/jetson_auto_install/InDroRobotics.png"
 
+# IndroRobotics Software Installation
 echo "Starting Install..."
-
 read -e -p "What is the sudo password?: " PASS
 echo $PASS | sudo -S apt update 
 sudo apt dist-upgrade -y
 sudo apt install curl -y
 sudo apt install git -y
+
+# Robot Operating Sysytem Installation (ROS Noetic)
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
@@ -48,12 +51,10 @@ echo "source $HOME/catkin_ws/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 # Git Pull the proper repos
-echo "Pulling Git Repos for SwiftNav and Rosserial"
+echo "Pulling Git Repos for and Rosserial"
 cd ~/catkin_ws/src
 git clone https://github.com/ros-drivers/rosserial.git --branch noetic-devel
 # git clone https://github.com/indro-robotics/swift_pgm.git
-
-
 # echo "Installing necessary SwiftNav packages"
 # cd ~/catkin_ws/src/swift_pgm
 # python3 -m pip install -r requirements.txt
