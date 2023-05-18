@@ -107,7 +107,7 @@ sudo apt install -y can-utils
 
 
 #CAN BUS INSTALLATION
-#bring up can interface
+#bring Down can interface
 sudo ip link set can0 down type can bitrate 500000
 
 cd
