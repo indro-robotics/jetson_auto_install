@@ -48,12 +48,12 @@ source ~/.bashrc
 echo "Pulling Git Repos for SwiftNav and Rosserial"
 cd ~/catkin_ws/src
 git clone https://github.com/ros-drivers/rosserial.git --branch noetic-devel
-git clone https://github.com/indro-robotics/swift_pgm.git
+# git clone https://github.com/indro-robotics/swift_pgm.git
 
 
-echo "Installing necessary SwiftNav packages"
-cd ~/catkin_ws/src/swift_pgm
-python3 -m pip install -r requirements.txt
+# echo "Installing necessary SwiftNav packages"
+# cd ~/catkin_ws/src/swift_pgm
+# python3 -m pip install -r requirements.txt
 python3 -m pip install catkin_pkg # May be needed for Ros_Upstart
 cd ~/catkin_ws/src/
 
@@ -108,14 +108,13 @@ sudo apt install -y can-utils
 
 #CAN BUS INSTALLATION
 #bring up can interface
-sudo ip link set can0 up type can bitrate 500000
+sudo ip link set can0 down type can bitrate 500000
 
 cd
 cd ../..
 
 #SYSTEMD-Networkd setup for CANBUS Automatically Restart on Startup
 sudo systemctl start systemd-networkd
-sudo systemctl enable systemd-networkd
 
 
 sudo touch /etc/systemd/network/80-can.network && {
@@ -125,7 +124,7 @@ echo '[CAN]'
 echo 'BitRate=500K'
 } | sudo tee /etc/systemd/network/80-can.network
 
-
+sudo systemctl enable systemd-networkd
 sudo systemctl restart systemd-networkd
 
 
