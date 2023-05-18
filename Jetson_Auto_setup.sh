@@ -2,6 +2,7 @@
 
 # InDro Robotics
 # Austin Greisman - austin.greisman@indrorobotics.com
+# Arif Anjum  - arif.anjum@indrorobotics.com
 
 # Used for install ROS Noetic, Swift Nav, Teensy, and Agile X Software
 echo "Starting Install..."
@@ -109,78 +110,98 @@ sudo apt install -y can-utils
 #bring up can interface
 sudo ip link set can0 up type can bitrate 500000
 
+cd
+cd ../..
+
+#SYSTEMD-Networkd setup for CANBUS Automatically Restart on Startup
+sudo systemctl start systemd-networkd
+sudo systemctl enable systemd-networkd
+
+
+sudo touch /etc/systemd/network/80-can.network && {
+echo '[Match]'
+echo 'Name=can0'
+echo '[CAN]'
+echo 'BitRate=500K'
+} | sudo tee /etc/systemd/network/80-can.network
+
+
+sudo systemctl restart systemd-networkd
+
+
+
 #echo "Running bring up commands..."
 #rosrun tracer_bringup setup_can2usb.bash
 #rosrun tracer_bringup bringup_can2usb.bash
 
-# Setup Reboot commands
-echo "Setting up system for automatic ROS boot"
-cd ~/catkin_ws/src
+# # Setup Reboot commands
+# echo "Setting up system for automatic ROS boot"
+# cd ~/catkin_ws/src
 
-catkin_create_pkg riab_startup std_msgs rospy
-cd ~/catkin_ws/src/riab_startup
-mkdir launch
-cd launch
-touch boot.launch
-echo "You will need to populate the boot.launch file with what you want to happen at boot..."
-rosrun robot_upstart install riab_startup/launch/boot.launch --job ros_boot --symlink
-sudo systemctl daemon-reload
-
-# Adding CAN bus support into kernel for boot
-sudo bash -c '
-
-auto can0
-  iface can0 inet manual
-  pre-up /sbin/ip link set can0 type can bitrate 500000
-  up /sbin/ifconfig can0 up
-  down /sbin/ifconfig can0 down" >> /etc/network/interfaces'
-  
-sudo systemctl daemon-reload
-sudo systemctl restart systemd-networkd
-sudo systemctl start ros_boot.service
-
-# Adding a time fix into network up...
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-cd $SCRIPT_DIR
-sudo chmod +x startup.sh
-sudo mv startup.sh /etc/network/if-up.d/
-sudo bash -c 'echo -e "[Unit]
-# Type=simple|forking|oneshot|dbus|notify|idle
-Description=Time Fix daemon
-## make sure we only start the service after network is up
-Wants=network-online.target
-After=network.target
-
-[Service]
-## here we can set custom environment variables
-Environment=AUTOSSH_GATETIME=0
-Environment=AUTOSSH_PORT=0
-ExecStart=/etc/network/if-up.d/startup.sh
-# Useful during debugging; remove it once the service is working
-StandardOutput=console
-
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/timefix.service'
-
-sudo systemctl daemon-reload
-sudo systemctl start timefix
-sudo systemctl enable timefix
-
-cd ~
-
-# Setting Up WireGuard VPN
-#sudo apt-get install wireguard openresolv -y
-# After adding /etc/wireguard/wg0.conf
-# sudo systemctl enable wg-quick@wg0.service
+# catkin_create_pkg riab_startup std_msgs rospy
+# cd ~/catkin_ws/src/riab_startup
+# mkdir launch
+# cd launch
+# touch boot.launch
+# echo "You will need to populate the boot.launch file with what you want to happen at boot..."
+# rosrun robot_upstart install riab_startup/launch/boot.launch --job ros_boot --symlink
 # sudo systemctl daemon-reload
-# sudo systemctl start wg-quick@wg0
+
+# # Adding CAN bus support into kernel for boot
+# sudo bash -c '
+
+# auto can0
+#   iface can0 inet manual
+#   pre-up /sbin/ip link set can0 type can bitrate 500000
+#   up /sbin/ifconfig can0 up
+#   down /sbin/ifconfig can0 down" >> /etc/network/interfaces'
+  
+# sudo systemctl daemon-reload
+# sudo systemctl restart systemd-networkd
+# sudo systemctl start ros_boot.service
+
+# # Adding a time fix into network up...
+# SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# cd $SCRIPT_DIR
+# sudo chmod +x startup.sh
+# sudo mv startup.sh /etc/network/if-up.d/
+# sudo bash -c 'echo -e "[Unit]
+# # Type=simple|forking|oneshot|dbus|notify|idle
+# Description=Time Fix daemon
+# ## make sure we only start the service after network is up
+# Wants=network-online.target
+# After=network.target
+
+# [Service]
+# ## here we can set custom environment variables
+# Environment=AUTOSSH_GATETIME=0
+# Environment=AUTOSSH_PORT=0
+# ExecStart=/etc/network/if-up.d/startup.sh
+# # Useful during debugging; remove it once the service is working
+# StandardOutput=console
+
+# [Install]
+# WantedBy=multi-user.target" > /etc/systemd/system/timefix.service'
+
+# sudo systemctl daemon-reload
+# sudo systemctl start timefix
+# sudo systemctl enable timefix
+
+# cd ~
+
+# # Setting Up WireGuard VPN
+# #sudo apt-get install wireguard openresolv -y
+# # After adding /etc/wireguard/wg0.conf
+# # sudo systemctl enable wg-quick@wg0.service
+# # sudo systemctl daemon-reload
+# # sudo systemctl start wg-quick@wg0
 
 
-# Connecting Rocos
-echo "Setting Up Rocos.."
-echo "You will need to interact with the terminal"
-echo "deb https://packages.rocos.io/apt stable main" | sudo tee -a /etc/apt/sources.list.d/rocos.list
-curl https://packages.rocos.io/apt/docs/key.gpg | sudo apt-key add -
-sudo apt-get update && sudo apt-get install rocos-agent -y
-sudo rocos-agent
+# # Connecting Rocos
+# echo "Setting Up Rocos.."
+# echo "You will need to interact with the terminal"
+# echo "deb https://packages.rocos.io/apt stable main" | sudo tee -a /etc/apt/sources.list.d/rocos.list
+# curl https://packages.rocos.io/apt/docs/key.gpg | sudo apt-key add -
+# sudo apt-get update && sudo apt-get install rocos-agent -y
+# sudo rocos-agent
 
