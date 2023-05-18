@@ -49,7 +49,8 @@ source ~/.bashrc
 echo "Pulling Git Repos for SwiftNav and Rosserial"
 cd ~/catkin_ws/src
 git clone https://github.com/ros-drivers/rosserial.git --branch noetic-devel
-git clone https://github.com/austin-inDro/swift_pgm.git
+git clone https://github.com/indro-robotics/swift_pgm.git
+
 
 echo "Installing necessary SwiftNav packages"
 cd ~/catkin_ws/src/swift_pgm
