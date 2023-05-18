@@ -116,10 +116,7 @@ sudo ip link set can0 down type can bitrate 500000
 cd
 cd ../..
 
-#SYSTEMD-Networkd setup for CANBUS Automatically Restart on Startup
-sudo systemctl start systemd-networkd
-
-
+#CANBUS Automatically Restart on Startup
 sudo touch /etc/systemd/network/80-can.network && {
 echo '[Match]'
 echo 'Name=can0'
@@ -127,6 +124,8 @@ echo '[CAN]'
 echo 'BitRate=500K'
 } | sudo tee /etc/systemd/network/80-can.network
 
+#SYSTEMD-Networkd setup for CANBUS Automatically Restart on Startup
+sudo systemctl start systemd-networkd
 sudo systemctl enable systemd-networkd
 sudo systemctl restart systemd-networkd
 
