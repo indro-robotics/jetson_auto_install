@@ -5,5 +5,3 @@
 
 
 Auto Install Script for the Jetson
-
-ubuntu_20.bash
