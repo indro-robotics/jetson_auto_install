@@ -7,7 +7,7 @@
 # Used for install ROS Noetic, Swift Nav, Teensy, and Agile X Software
 
 # INDROROBOTICS Background Installation
-gsettings set org.gnome.desktop.background picture-uri "file:///home/$USER/jetson_auto_install/InDroRobotics.png"
+gsettings set org.gnome.desktop.background picture-uri "file://$(pwd)/InDroRobotics.png"
 
 # IndroRobotics Software Installation
 echo "Starting Install..."
